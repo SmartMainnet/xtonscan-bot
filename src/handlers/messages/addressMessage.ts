@@ -1,7 +1,3 @@
-import {
-  nftInlineKeyboard,
-  walletInlineKeyboard,
-} from '../../keyboards/inline_keyboard/index.js'
 import { getAddressType, getNftInfo, getWalletInfo } from '../../api/index.js'
 import { NFT, Wallet } from '../../classes/index.js'
 import { ContextType } from '../../types/index.js'
@@ -24,11 +20,11 @@ export const addressMessage = async (ctx: ContextType) => {
         return
       }
 
-      const wallet = new Wallet(walletInfo)
+      const wallet = new Wallet(ctx, walletInfo)
 
-      await ctx.reply(ctx.t('walletInfo', wallet.getCaption()), {
+      await ctx.reply(wallet.getCaption(), {
         parse_mode: 'Markdown',
-        reply_markup: walletInlineKeyboard(walletInfo.address),
+        reply_markup: wallet.getInlineKeyboard(),
       })
     }
 
@@ -40,16 +36,12 @@ export const addressMessage = async (ctx: ContextType) => {
         return
       }
 
-      const nft = new NFT(ctx, nftInfo)
+      const nft = new NFT(ctx, address, nftInfo)
 
       await ctx.replyWithPhoto(nft.image, {
-        caption: ctx.t('nftInfo', nft.getCaption()),
+        caption: nft.getCaption(),
         parse_mode: 'Markdown',
-        reply_markup: nftInlineKeyboard(
-          nft.tonviewer_url,
-          nft.getgems_url,
-          nft.is_approved_by_getgems
-        ),
+        reply_markup: nft.getInlineKeyboard(),
       })
     }
   } catch (e) {

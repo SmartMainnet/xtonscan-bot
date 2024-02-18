@@ -29,6 +29,21 @@ export interface INftInfo {
   approved_by?: string[]
 }
 
+export interface IWalletInfo {
+  address: string
+  raw_address: string
+  status: string
+  name?: string
+  balance: {
+    TON: number
+    USD: number
+  }
+  jetton_count: number
+  nft_count: number
+  transaction_count: number
+  is_wallet: boolean
+}
+
 export type ContextType = Context & IConfig & I18nFlavor
 
 export type BotApiType = { api: Api }

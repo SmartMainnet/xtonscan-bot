@@ -1,19 +1,13 @@
 import { InputMediaBuilder } from 'grammy'
 
 import {
-  backToWalletInlineKeyboard,
-  nftsInlineKeyboard,
-  walletInlineKeyboard,
-} from '../../keyboards/inline_keyboard/index.js'
-import {
   getJettons,
   getNftInfoByOwner,
   getRawAddress,
   getTransactions,
   getWalletInfo,
 } from '../../api/index.js'
-import { NFT, Transaction, Wallet } from '../../classes/index.js'
-import { shortAddress } from '../../utils/index.js'
+import { Jettons, NFT, Transactions, Wallet } from '../../classes/index.js'
 import { ContextType } from '../../types/index.js'
 
 export const walletCallback = async (ctx: ContextType) => {
@@ -24,6 +18,7 @@ export const walletCallback = async (ctx: ContextType) => {
     const address = callback.data!.split(' ')[1]
     const pageString = callback.data!.split(' ')[2]
 
+    const page = pageString !== undefined ? Number(pageString) : undefined
     const rawAddress = await getRawAddress(address)
 
     if (rawAddress.error) {
@@ -31,42 +26,20 @@ export const walletCallback = async (ctx: ContextType) => {
       return
     }
 
-    const page = pageString !== undefined ? Number(pageString) : undefined
-
     if (data === 'jettons') {
-      const jettons = await getJettons(address)
+      const jettonsRes = await getJettons(address)
 
-      if (jettons.error) {
-        await ctx.reply(ctx.t(jettons.error))
+      if (jettonsRes.error) {
+        await ctx.reply(ctx.t(jettonsRes.error))
         return
       }
 
-      const jettonsString = jettons
-        ?.map((data: any) => {
-          const name = data.jetton.name
-          const symbol = data.jetton.symbol
-          const balance = data.balance / 10 ** data.jetton.decimals
-          const price = data.price.prices.USD
+      const jettons = new Jettons(ctx, address, jettonsRes)
 
-          return ctx.t('jetton', {
-            name,
-            balance: balance.toFixed(2),
-            symbol,
-            balance_usd: (balance * price).toFixed(2),
-          })
-        })
-        .join('\n')
-
-      await ctx.editMessageText(
-        ctx.t('jettons', {
-          short_address: shortAddress(address),
-          jettons: jettonsString,
-        }),
-        {
-          parse_mode: 'Markdown',
-          reply_markup: backToWalletInlineKeyboard(address),
-        }
-      )
+      await ctx.editMessageText(jettons.getCaption(), {
+        parse_mode: 'Markdown',
+        reply_markup: jettons.getInlineKeyboard(),
+      })
     }
 
     if (data === 'nfts') {
@@ -77,19 +50,13 @@ export const walletCallback = async (ctx: ContextType) => {
         return
       }
 
-      const nft = new NFT(ctx, nftInfo)
+      const nft = new NFT(ctx, address, nftInfo, page)
 
       if (page === undefined) {
         await ctx.replyWithPhoto(nft.image, {
-          caption: ctx.t('nftInfo', nft.getCaption()),
+          caption: nft.getCaption(),
           parse_mode: 'Markdown',
-          reply_markup: nftsInlineKeyboard(
-            nft.tonviewer_url,
-            nft.getgems_url,
-            nft.is_approved_by_getgems,
-            address,
-            nft.last_page
-          ),
+          reply_markup: nft.getInlineKeyboard(),
         })
         await ctx.deleteMessage()
         return
@@ -97,48 +64,36 @@ export const walletCallback = async (ctx: ContextType) => {
 
       if (page !== undefined) {
         const newMedia = InputMediaBuilder.photo(nft.image, {
-          caption: ctx.t('nftInfo', nft.getCaption()),
+          caption: nft.getCaption(),
           parse_mode: 'Markdown',
         })
 
         await ctx.editMessageMedia(newMedia, {
-          reply_markup: nftsInlineKeyboard(
-            nft.tonviewer_url,
-            nft.getgems_url,
-            nft.is_approved_by_getgems,
-            address,
-            nft.last_page,
-            page
-          ),
+          reply_markup: nft.getInlineKeyboard(),
         })
         return
       }
     }
 
     if (data === 'transactions') {
-      const transactions = await getTransactions(address, 10)
+      const transactionsRes = await getTransactions(address, 10)
 
-      if (transactions.error) {
-        await ctx.reply(ctx.t(transactions.error))
+      if (transactionsRes.error) {
+        await ctx.reply(ctx.t(transactionsRes.error))
         return
       }
 
-      const transactionsString = transactions.events
-        ?.map((transaction: any) =>
-          new Transaction(transaction, rawAddress).getTransaction()
-        )
-        .join('\n')
-
-      await ctx.editMessageText(
-        ctx.t('transactions', {
-          short_address: shortAddress(address),
-          transactions: transactionsString,
-        }),
-        {
-          parse_mode: 'Markdown',
-          reply_markup: backToWalletInlineKeyboard(address),
-        }
+      const transactions = new Transactions(
+        ctx,
+        address,
+        rawAddress,
+        transactionsRes
       )
+
+      await ctx.editMessageText(transactions.getCaption(), {
+        parse_mode: 'Markdown',
+        reply_markup: transactions.getInlineKeyboard(),
+      })
     }
 
     if (data === 'backToWallet') {
@@ -149,11 +104,11 @@ export const walletCallback = async (ctx: ContextType) => {
         return
       }
 
-      const wallet = new Wallet(walletInfo)
+      const wallet = new Wallet(ctx, walletInfo)
 
-      await ctx.editMessageText(ctx.t('walletInfo', wallet.getCaption()), {
+      await ctx.editMessageText(wallet.getCaption(), {
         parse_mode: 'Markdown',
-        reply_markup: walletInlineKeyboard(address),
+        reply_markup: wallet.getInlineKeyboard(),
       })
     }
 
@@ -165,11 +120,11 @@ export const walletCallback = async (ctx: ContextType) => {
         return
       }
 
-      const wallet = new Wallet(walletInfo)
+      const wallet = new Wallet(ctx, walletInfo)
 
-      await ctx.reply(ctx.t('walletInfo', wallet.getCaption()), {
+      await ctx.reply(wallet.getCaption(), {
         parse_mode: 'Markdown',
-        reply_markup: walletInlineKeyboard(address),
+        reply_markup: wallet.getInlineKeyboard(),
       })
       await ctx.deleteMessage()
     }
