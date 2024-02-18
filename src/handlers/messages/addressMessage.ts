@@ -36,7 +36,7 @@ export const addressMessage = async (ctx: ContextType) => {
         return
       }
 
-      const nft = new NFT(ctx, address, nftInfo)
+      const nft = new NFT(ctx, nftInfo)
 
       await ctx.replyWithPhoto(nft.image, {
         caption: nft.getCaption(),

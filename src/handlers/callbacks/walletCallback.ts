@@ -7,7 +7,7 @@ import {
   getTransactions,
   getWalletInfo,
 } from '../../api/index.js'
-import { Jettons, NFT, Transactions, Wallet } from '../../classes/index.js'
+import { Jettons, NFTs, Transactions, Wallet } from '../../classes/index.js'
 import { ContextType } from '../../types/index.js'
 
 export const walletCallback = async (ctx: ContextType) => {
@@ -50,7 +50,7 @@ export const walletCallback = async (ctx: ContextType) => {
         return
       }
 
-      const nft = new NFT(ctx, address, nftInfo, page)
+      const nft = new NFTs(ctx, address, nftInfo, page)
 
       if (page === undefined) {
         await ctx.replyWithPhoto(nft.image, {
