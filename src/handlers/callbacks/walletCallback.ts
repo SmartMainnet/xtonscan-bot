@@ -27,14 +27,14 @@ export const walletCallback = async (ctx: ContextType) => {
     }
 
     if (data === 'jettons') {
-      const jettonsRes = await getJettons(address)
+      const jettonsArray = await getJettons(address)
 
-      if (jettonsRes.error) {
-        await ctx.reply(ctx.t(jettonsRes.error))
+      if (jettonsArray.error) {
+        await ctx.reply(ctx.t(jettonsArray.error))
         return
       }
 
-      const jettons = new Jettons(ctx, address, jettonsRes)
+      const jettons = new Jettons(ctx, address, jettonsArray)
 
       await ctx.editMessageText(jettons.getCaption(), {
         parse_mode: 'Markdown',
@@ -76,10 +76,10 @@ export const walletCallback = async (ctx: ContextType) => {
     }
 
     if (data === 'transactions') {
-      const transactionsRes = await getTransactions(address, 10)
+      const transactionsArray = await getTransactions(address, 10)
 
-      if (transactionsRes.error) {
-        await ctx.reply(ctx.t(transactionsRes.error))
+      if (transactionsArray.error) {
+        await ctx.reply(ctx.t(transactionsArray.error))
         return
       }
 
@@ -87,7 +87,7 @@ export const walletCallback = async (ctx: ContextType) => {
         ctx,
         address,
         rawAddress,
-        transactionsRes
+        transactionsArray
       )
 
       await ctx.editMessageText(transactions.getCaption(), {

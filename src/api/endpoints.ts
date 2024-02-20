@@ -15,6 +15,11 @@ export const getWalletInfo = async (address: string) => {
   return await rawAddress.call()
 }
 
+export const getJettonInfo = async (address: string) => {
+  const rawAddress = new Endpoint('GET', '/ton/getJettonInfo', { address })
+  return await rawAddress.call()
+}
+
 export const getNftInfo = async (address: string) => {
   const rawAddress = new Endpoint('GET', '/ton/getNftInfo', { address })
   return await rawAddress.call()

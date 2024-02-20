@@ -45,13 +45,26 @@ transactions =
   { $transactions }
 
 walletInfo =
+  📖 *Wallet Info (Beta)*
   👛 Address: *{ $short_address }*
+
   ℹ️ Status: *{ $status }*
   🏷 Name: *{ $name }*
   💎 Balance: *{ $balance_ton } TON | ${ $balance_usd }*
   🪙 Jettons Count: *{ $jetton_count }*
   🖼 NFT Count: *{ $nft_count }*
   ↕️ Transactions Count: *{ $transaction_count }*
+jettonInfo =
+  📖 *Jetton Info (Beta)*
+  👛 Address: *{ $short_address }*
+
+  ℹ️ Mintable: *{ $mintable }*
+  🪙 Total Supply: *{ $total_supply }*
+  👤 Holders Count: *{ $holders_count }*
+  🏷 Name: *{ $name }*
+  💎 Symbol: *{ $symbol }
+
+  📓 *{ $description }
 nftInfo =
   Name: *{ $name }*{ $description }{ $attributes }{ $approved_by }
 

@@ -1,5 +1,10 @@
-import { getAddressType, getNftInfo, getWalletInfo } from '../../api/index.js'
-import { NFT, Wallet } from '../../classes/index.js'
+import {
+  getAddressType,
+  getJettonInfo,
+  getNftInfo,
+  getWalletInfo,
+} from '../../api/index.js'
+import { Jetton, NFT, Wallet } from '../../classes/index.js'
 import { ContextType } from '../../types/index.js'
 
 export const addressMessage = async (ctx: ContextType) => {
@@ -25,6 +30,22 @@ export const addressMessage = async (ctx: ContextType) => {
       await ctx.reply(wallet.getCaption(), {
         parse_mode: 'Markdown',
         reply_markup: wallet.getInlineKeyboard(),
+      })
+    }
+
+    if (addressType.type === 'jetton') {
+      const jettonInfo = await getJettonInfo(addressType.address)
+
+      if (jettonInfo.error) {
+        await ctx.reply(ctx.t(jettonInfo.error))
+        return
+      }
+
+      const jetton = new Jetton(ctx, jettonInfo)
+
+      await ctx.reply(jetton.getCaption(), {
+        parse_mode: 'Markdown',
+        reply_markup: jetton.getInlineKeyboard(),
       })
     }
 
