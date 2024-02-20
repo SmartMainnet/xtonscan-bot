@@ -15,7 +15,10 @@
     "@grammyjs/ratelimiter": "^1.2.0",
     "axios": "^1.6.1",
     "dotenv": "^16.3.1",
-    "grammy": "^1.19.2"
+    "grammy": "^1.19.2",
+    "ton": "^13.9.0",
+    "ton-core": "^0.53.0",
+    "ton-crypto": "^3.2.0"
   },
   "devDependencies": {
     "@types/node": "^20.11.16",

@@ -1,5 +1,10 @@
 import { Endpoint } from '../classes/index.js'
 
+export const getFriendlyAddress = async (address: string) => {
+  const rawAddress = new Endpoint('GET', '/ton/getFriendlyAddress', { address })
+  return await rawAddress.call()
+}
+
 export const getRawAddress = async (address: string) => {
   const rawAddress = new Endpoint('GET', '/ton/getRawAddress', { address })
   return await rawAddress.call()
