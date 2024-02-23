@@ -3,7 +3,11 @@ import { Bot } from 'grammy'
 
 import { i18nMiddleware, limitMiddleware } from './middlewares/plugins/index.js'
 import { helpCommand, startCommand } from './handlers/commands/index.js'
-import { addressMessage, textMessage } from './handlers/messages/index.js'
+import {
+  addressMessage,
+  textMessage,
+  transactionMessage,
+} from './handlers/messages/index.js'
 import { walletCallback } from './handlers/callbacks/index.js'
 import { ContextType } from './types/index.js'
 
@@ -27,6 +31,7 @@ bot.command('help', helpCommand)
 
 // messages
 bot.hears([/^[a-z0-9+/_-]{48}$/i, /^(0|-1):[a-f0-9]{64}$/i], addressMessage)
+bot.hears(/^[a-f0-9]{64}$/i, transactionMessage)
 bot.hears(/./, textMessage)
 
 // callbacks

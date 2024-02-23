@@ -1,6 +1,7 @@
 export * from './Endpoint.js'
 
 export * from './Wallet.js'
+export * from './Transaction.js'
 export * from './Jetton.js'
 export * from './NFT.js'
 

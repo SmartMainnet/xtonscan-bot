@@ -30,19 +30,24 @@ attributes =
 approved_by =
   Approved: *{ $approved_by }*
 
+transaction =
+  📖 *Transaction (Beta)*
+  🔖 Hash: *{ $short_hash }*
+
+  { $transaction }
 jetton =
   🪙 { $name }: *{ $balance } { $symbol } | ${ $balance_usd }*
 
-jettons =
-  📖 *Jettons (Beta)*
-  👛 Address: *{ $short_address }*
-
-  { $jettons }
 transactions =
   📖 *Transactions (Beta)*
   👛 Address: *{ $short_address }*
 
   { $transactions }
+jettons =
+  📖 *Jettons (Beta)*
+  👛 Address: *{ $short_address }*
+
+  { $jettons }
 
 walletInfo =
   📖 *Wallet Info (Beta)*
@@ -53,7 +58,6 @@ walletInfo =
   💎 Balance: *{ $balance_ton } TON | ${ $balance_usd }*
   🪙 Jettons Count: *{ $jetton_count }*
   🖼 NFT Count: *{ $nft_count }*
-  ↕️ Transactions Count: *{ $transaction_count }*
 jettonInfo =
   📖 *Jetton Info (Beta)*
   👛 Address: *{ $short_address }*

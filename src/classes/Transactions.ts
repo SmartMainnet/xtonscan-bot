@@ -17,8 +17,9 @@ export class Transactions {
     this.owner_address = owner_address
     this.transactions = transactions.events
       ?.map((transaction: any) => {
-        const description = transaction.actions[0].simple_preview.description
         const type = transaction.actions[0].type
+        const description = transaction.actions[0].simple_preview.description
+        const deepLink = `t.me/${ctx.me.username}?start=${transaction.event_id}`
 
         const isTonTransfer = type === 'TonTransfer'
         const isJettonTransfer = type === 'JettonTransfer'
@@ -31,11 +32,11 @@ export class Transactions {
           const recipient = transaction.actions[0].TonTransfer.recipient?.address
 
           if (sender === raw_owner_address) {
-            return `⬆️ ${description}`
+            return `⬆️ [${description}](${deepLink})`
           }
 
           if (recipient === raw_owner_address) {
-            return `⬇️ ${description}`
+            return `⬇️ [${description}](${deepLink})`
           }
         }
 
@@ -44,11 +45,11 @@ export class Transactions {
           const recipient = transaction.actions[0].JettonTransfer.recipient?.address
 
           if (sender === raw_owner_address) {
-            return `⬆️ ${description}`
+            return `⬆️ [${description}](${deepLink})`
           }
 
           if (recipient === raw_owner_address) {
-            return `⬇️ ${description}`
+            return `⬇️ [${description}](${deepLink})`
           }
         }
 
@@ -57,23 +58,23 @@ export class Transactions {
           const recipient = transaction.actions[0].NftItemTransfer.recipient?.address
 
           if (sender === raw_owner_address) {
-            return `⬆️ ${description}`
+            return `⬆️ [${description}](${deepLink})`
           }
 
           if (recipient === raw_owner_address) {
-            return `⬇️ ${description}`
+            return `⬇️ [${description}](${deepLink})`
           }
         }
 
         if (isJettonSwap) {
-          return `🔁 ${description}`
+          return `🔁 [${description}](${deepLink})`
         }
 
         if (isAuctionBid) {
-          return `🔨 ${description}`
+          return `🔨 [${description}](${deepLink})`
         }
 
-        return `↕️ ${description}`
+        return `↕️ [${description}](${deepLink})`
       })
       .join('\n')
   }

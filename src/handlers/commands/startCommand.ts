@@ -1,13 +1,16 @@
-import { scanAddress } from '../../utils/index.js'
+import { scanAddress, scanTransaction } from '../../utils/index.js'
 import { ContextType } from '../../types/index.js'
 
 export const startCommand = async (ctx: ContextType) => {
   try {
     const address = String(ctx.match)
-    const RegExp = /^[a-z0-9+/_-]{48}$/i
+    const AddressRegExp = /^[a-z0-9+/_-]{48}$/i
+    const TransactionRegExp = /^[a-f0-9]{64}$/i
 
-    if (RegExp.test(address)) {
+    if (AddressRegExp.test(address)) {
       await scanAddress(ctx, address)
+    } else if (TransactionRegExp.test(address)) {
+      await scanTransaction(ctx, address)
     } else {
       await ctx.reply(ctx.t('start', { bot_name: ctx.me.first_name }))
       await ctx.reply(ctx.t('help'), {
