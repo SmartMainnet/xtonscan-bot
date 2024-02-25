@@ -1,4 +1,4 @@
-import { backToWalletInlineKeyboard } from '../keyboards/inline_keyboard/index.js'
+import { transactionsInlineKeyboard } from '../keyboards/inline_keyboard/index.js'
 import { shortAddress } from '../utils/index.js'
 import { ContextType } from '../types/index.js'
 
@@ -6,14 +6,19 @@ export class Transactions {
   ctx: ContextType
   owner_address: string
   transactions: any
+  page: number
+  is_last_page: boolean
 
   constructor(
     ctx: ContextType,
     owner_address: string,
     raw_owner_address: string,
-    transactions: any
+    transactions: any,
+    page: number
   ) {
     this.ctx = ctx
+    this.page = page
+    this.is_last_page = transactions.is_last_page
     this.owner_address = owner_address
     this.transactions = transactions.events
       ?.map((transaction: any) => {
@@ -87,6 +92,10 @@ export class Transactions {
   }
 
   getInlineKeyboard() {
-    return backToWalletInlineKeyboard(this.owner_address)
+    return transactionsInlineKeyboard(
+      this.owner_address,
+      this.page,
+      this.is_last_page
+    )
   }
 }

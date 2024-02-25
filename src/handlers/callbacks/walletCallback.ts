@@ -76,7 +76,12 @@ export const walletCallback = async (ctx: ContextType) => {
     }
 
     if (data === 'transactions') {
-      const transactionsArray = await getTransactions(address, 10)
+      const transactionsArray = await getTransactions(
+        address,
+        callback.message?.message_id!,
+        10,
+        page || 0
+      )
 
       if (transactionsArray.error) {
         await ctx.reply(ctx.t(transactionsArray.error))
@@ -87,7 +92,8 @@ export const walletCallback = async (ctx: ContextType) => {
         ctx,
         address,
         rawAddress,
-        transactionsArray
+        transactionsArray,
+        page || 0
       )
 
       await ctx.editMessageText(transactions.getCaption(), {

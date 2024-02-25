@@ -40,8 +40,18 @@ export const getNftInfoByOwner = async (address: string, page: number) => {
   return await rawAddress.call()
 }
 
-export const getNfts = async (address: string) => {
-  const rawAddress = new Endpoint('GET', '/ton/getNfts', { address })
+export const getTransactions = async (
+  address: string,
+  message_id: number,
+  limit: number,
+  page: number
+) => {
+  const rawAddress = new Endpoint('GET', '/ton/getTransactions', {
+    address,
+    message_id,
+    limit,
+    page,
+  })
   return await rawAddress.call()
 }
 
@@ -50,7 +60,7 @@ export const getJettons = async (address: string) => {
   return await rawAddress.call()
 }
 
-export const getTransactions = async (address: string, limit: number) => {
-  const rawAddress = new Endpoint('GET', '/ton/getTransactions', { address, limit })
+export const getNfts = async (address: string) => {
+  const rawAddress = new Endpoint('GET', '/ton/getNfts', { address })
   return await rawAddress.call()
 }
