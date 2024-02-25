@@ -42,13 +42,11 @@ export const getNftInfoByOwner = async (address: string, page: number) => {
 
 export const getTransactions = async (
   address: string,
-  message_id: number,
   limit: number,
   page: number
 ) => {
   const rawAddress = new Endpoint('GET', '/ton/getTransactions', {
     address,
-    message_id,
     limit,
     page,
   })

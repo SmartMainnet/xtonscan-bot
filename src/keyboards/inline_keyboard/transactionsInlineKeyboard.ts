@@ -2,9 +2,10 @@ import { InlineKeyboard } from 'grammy'
 
 export const transactionsInlineKeyboard = (
   ownerAddress: string,
-  page: number = 0,
-  isLastPage: boolean = false
+  page: number,
+  max_page: number
 ) => {
+  const isLastPage = page === max_page
   const paginationButtonRow = []
 
   if (page > 0) {
@@ -15,7 +16,7 @@ export const transactionsInlineKeyboard = (
 
   if (!(page === 0 && isLastPage)) {
     paginationButtonRow.push(
-      InlineKeyboard.text(`[ ${page + 1} ]`, 'disabledButton')
+      InlineKeyboard.text(`[ ${page + 1} / ${max_page + 1} ]`, 'disabledButton')
     )
   }
 

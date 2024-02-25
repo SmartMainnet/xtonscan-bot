@@ -5,21 +5,17 @@ import { ContextType } from '../types/index.js'
 export class Transactions {
   ctx: ContextType
   owner_address: string
+  raw_owner_address: string
   transactions: any
   page: number
-  is_last_page: boolean
+  max_page: number
 
-  constructor(
-    ctx: ContextType,
-    owner_address: string,
-    raw_owner_address: string,
-    transactions: any,
-    page: number
-  ) {
+  constructor(ctx: ContextType, transactions: any) {
     this.ctx = ctx
-    this.page = page
-    this.is_last_page = transactions.is_last_page
-    this.owner_address = owner_address
+    this.page = transactions.page
+    this.max_page = transactions.max_page
+    this.owner_address = transactions.owner_address
+    this.raw_owner_address = transactions.raw_owner_address
     this.transactions = transactions.events
       ?.map((transaction: any) => {
         const type = transaction.actions[0].type
@@ -36,11 +32,11 @@ export class Transactions {
           const sender = transaction.actions[0].TonTransfer.sender?.address
           const recipient = transaction.actions[0].TonTransfer.recipient?.address
 
-          if (sender === raw_owner_address) {
+          if (sender === this.raw_owner_address) {
             return `⬆️ [${description}](${deepLink})`
           }
 
-          if (recipient === raw_owner_address) {
+          if (recipient === this.raw_owner_address) {
             return `⬇️ [${description}](${deepLink})`
           }
         }
@@ -49,11 +45,11 @@ export class Transactions {
           const sender = transaction.actions[0].JettonTransfer.sender?.address
           const recipient = transaction.actions[0].JettonTransfer.recipient?.address
 
-          if (sender === raw_owner_address) {
+          if (sender === this.raw_owner_address) {
             return `⬆️ [${description}](${deepLink})`
           }
 
-          if (recipient === raw_owner_address) {
+          if (recipient === this.raw_owner_address) {
             return `⬇️ [${description}](${deepLink})`
           }
         }
@@ -62,11 +58,11 @@ export class Transactions {
           const sender = transaction.actions[0].NftItemTransfer.sender?.address
           const recipient = transaction.actions[0].NftItemTransfer.recipient?.address
 
-          if (sender === raw_owner_address) {
+          if (sender === this.raw_owner_address) {
             return `⬆️ [${description}](${deepLink})`
           }
 
-          if (recipient === raw_owner_address) {
+          if (recipient === this.raw_owner_address) {
             return `⬇️ [${description}](${deepLink})`
           }
         }
@@ -92,10 +88,6 @@ export class Transactions {
   }
 
   getInlineKeyboard() {
-    return transactionsInlineKeyboard(
-      this.owner_address,
-      this.page,
-      this.is_last_page
-    )
+    return transactionsInlineKeyboard(this.owner_address, this.page, this.max_page)
   }
 }
