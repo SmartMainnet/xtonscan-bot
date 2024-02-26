@@ -1,5 +1,5 @@
 import { walletInlineKeyboard } from '../keyboards/inline_keyboard/index.js'
-import { shortAddress } from '../utils/index.js'
+import { Address } from './index.js'
 import { ContextType, IWalletInfo } from '../types/index.js'
 
 export class Wallet {
@@ -16,7 +16,7 @@ export class Wallet {
   constructor(ctx: ContextType, walletInfo: IWalletInfo) {
     this.ctx = ctx
     this.address = walletInfo.address
-    this.short_address = shortAddress(walletInfo.address)
+    this.short_address = Address.short(walletInfo.address)
     this.status = walletInfo.status
     this.name = walletInfo.name || 'no'
     this.balance_ton = walletInfo.balance.TON

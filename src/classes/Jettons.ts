@@ -1,7 +1,5 @@
-import { Address } from 'ton-core'
-
 import { backToWalletInlineKeyboard } from '../keyboards/inline_keyboard/index.js'
-import { shortAddress } from '../utils/index.js'
+import { Address } from './index.js'
 import { ContextType } from '../types/index.js'
 
 export class Jettons {
@@ -16,7 +14,7 @@ export class Jettons {
       ?.map((jetton_data: any) => {
         const name = jetton_data.jetton.name
         const jettonAddress = jetton_data.jetton.address
-        const friendlyAddress = Address.normalize(jettonAddress)
+        const friendlyAddress = Address.getNonBounceable(jettonAddress)
         const deepLink = `t.me/${ctx.me.username}?start=${friendlyAddress}`
         const symbol = jetton_data.jetton.symbol
         const balance = jetton_data.balance / 10 ** jetton_data.jetton.decimals
@@ -34,7 +32,7 @@ export class Jettons {
 
   getCaption() {
     return this.ctx.t('jettons', {
-      short_address: shortAddress(this.owner_address),
+      short_address: Address.short(this.owner_address),
       jettons: this.jettons,
     })
   }

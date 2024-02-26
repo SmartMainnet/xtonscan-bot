@@ -1,5 +1,5 @@
 import { jettonInlineKeyboard } from '../keyboards/inline_keyboard/index.js'
-import { shortAddress } from '../utils/index.js'
+import { Address } from './index.js'
 import { ContextType } from '../types/index.js'
 
 const { REFERRAL_ADDRESS } = process.env
@@ -37,7 +37,7 @@ export class Jetton {
 
   getCaption() {
     return this.ctx.t('jetton_info', {
-      short_address: shortAddress(this.address),
+      short_address: Address.short(this.address),
       mintable: this.mintable ? 'Yes' : 'No',
       total_supply: this.total_supply,
       holders_count: this.holders_count,

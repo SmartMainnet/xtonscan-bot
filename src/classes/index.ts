@@ -1,4 +1,5 @@
 export * from './Endpoint.js'
+export * from './Address.js'
 
 export * from './Wallet.js'
 export * from './Transaction.js'

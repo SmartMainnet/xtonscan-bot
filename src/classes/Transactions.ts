@@ -1,5 +1,5 @@
 import { transactionsInlineKeyboard } from '../keyboards/inline_keyboard/index.js'
-import { shortAddress } from '../utils/index.js'
+import { Address } from './index.js'
 import { ContextType } from '../types/index.js'
 
 export class Transactions {
@@ -82,7 +82,7 @@ export class Transactions {
 
   getCaption() {
     return this.ctx.t('transactions', {
-      short_address: shortAddress(this.owner_address),
+      short_address: Address.short(this.owner_address),
       transactions: this.transactions,
     })
   }

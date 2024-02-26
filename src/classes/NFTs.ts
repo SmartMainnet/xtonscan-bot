@@ -1,5 +1,5 @@
 import { nftsInlineKeyboard } from '../keyboards/inline_keyboard/index.js'
-import { shortAddress } from '../utils/index.js'
+import { Address } from './index.js'
 import { ContextType, INftInfo } from '../types/index.js'
 
 export class NFTs {
@@ -26,7 +26,7 @@ export class NFTs {
     this.ctx = ctx
     this.owner_address = owner_address
     this.owner_name_or_address =
-      nftInfo.owner_name || shortAddress(nftInfo.owner_address)
+      nftInfo.owner_name || Address.short(nftInfo.owner_address)
     this.image = nftInfo.nft_image
     this.name = nftInfo.nft_name
     this.description = nftInfo.nft_description
