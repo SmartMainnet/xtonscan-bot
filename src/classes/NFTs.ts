@@ -54,7 +54,7 @@ export class NFTs {
   }
 
   getCaption() {
-    return this.ctx.t('nftInfo', {
+    return this.ctx.t('nft_info', {
       name: this.name,
       description: this.description,
       attributes: this.attributes,

@@ -9,22 +9,24 @@ import { ContextType } from '../types/index.js'
 
 export const scanAddress = async (ctx: ContextType, address: string) => {
   try {
-    const addressType = await getAddressType(address)
+    const addressTypeResponse = await getAddressType(address)
 
-    if (addressType.error) {
-      await ctx.reply(ctx.t(addressType.error))
+    if ('error' in addressTypeResponse) {
+      await ctx.reply(ctx.t(addressTypeResponse.error))
       return
     }
 
-    if (addressType.type === 'wallet') {
-      const walletInfo = await getWalletInfo(addressType.address)
+    if (addressTypeResponse.result.type === 'wallet') {
+      const walletInfoResponse = await getWalletInfo(
+        addressTypeResponse.result.address
+      )
 
-      if (walletInfo.error) {
-        await ctx.reply(ctx.t(walletInfo.error))
+      if ('error' in walletInfoResponse) {
+        await ctx.reply(ctx.t(walletInfoResponse.error))
         return
       }
 
-      const wallet = new Wallet(ctx, walletInfo)
+      const wallet = new Wallet(ctx, walletInfoResponse.result)
 
       await ctx.reply(wallet.getCaption(), {
         parse_mode: 'Markdown',
@@ -32,15 +34,17 @@ export const scanAddress = async (ctx: ContextType, address: string) => {
       })
     }
 
-    if (addressType.type === 'jetton') {
-      const jettonInfo = await getJettonInfo(addressType.address)
+    if (addressTypeResponse.result.type === 'jetton') {
+      const jettonInfoResponse = await getJettonInfo(
+        addressTypeResponse.result.address
+      )
 
-      if (jettonInfo.error) {
-        await ctx.reply(ctx.t(jettonInfo.error))
+      if ('error' in jettonInfoResponse) {
+        await ctx.reply(ctx.t(jettonInfoResponse.error))
         return
       }
 
-      const jetton = new Jetton(ctx, jettonInfo)
+      const jetton = new Jetton(ctx, jettonInfoResponse.result)
 
       await ctx.reply(jetton.getCaption(), {
         parse_mode: 'Markdown',
@@ -48,15 +52,15 @@ export const scanAddress = async (ctx: ContextType, address: string) => {
       })
     }
 
-    if (addressType.type === 'nft') {
-      const nftInfo = await getNftInfo(addressType.address)
+    if (addressTypeResponse.result.type === 'nft') {
+      const nftInfoResponse = await getNftInfo(addressTypeResponse.result.address)
 
-      if (nftInfo.error) {
-        await ctx.reply(ctx.t(nftInfo.error))
+      if ('error' in nftInfoResponse) {
+        await ctx.reply(ctx.t(nftInfoResponse.error))
         return
       }
 
-      const nft = new NFT(ctx, nftInfo)
+      const nft = new NFT(ctx, nftInfoResponse.result)
 
       await ctx.replyWithPhoto(nft.image, {
         caption: nft.getCaption(),

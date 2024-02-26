@@ -3,7 +3,6 @@ import { InputMediaBuilder } from 'grammy'
 import {
   getJettons,
   getNftInfoByOwner,
-  getRawAddress,
   getTransactions,
   getWalletInfo,
 } from '../../api/index.js'
@@ -19,22 +18,16 @@ export const walletCallback = async (ctx: ContextType) => {
     const pageString = callback.data!.split(' ')[2]
 
     const page = pageString !== undefined ? Number(pageString) : undefined
-    const rawAddress = await getRawAddress(address)
-
-    if (rawAddress.error) {
-      await ctx.reply(ctx.t(rawAddress.error))
-      return
-    }
 
     if (data === 'jettons') {
-      const jettonsArray = await getJettons(address)
+      const jettonsResponse = await getJettons(address)
 
-      if (jettonsArray.error) {
-        await ctx.reply(ctx.t(jettonsArray.error))
+      if ('error' in jettonsResponse) {
+        await ctx.reply(ctx.t(jettonsResponse.error))
         return
       }
 
-      const jettons = new Jettons(ctx, address, jettonsArray)
+      const jettons = new Jettons(ctx, address, jettonsResponse.result)
 
       await ctx.editMessageText(jettons.getCaption(), {
         parse_mode: 'Markdown',
@@ -43,14 +36,14 @@ export const walletCallback = async (ctx: ContextType) => {
     }
 
     if (data === 'nfts') {
-      const nftInfo = await getNftInfoByOwner(address, page || 0)
+      const nftInfoResponse = await getNftInfoByOwner(address, page || 0)
 
-      if (nftInfo.error) {
-        await ctx.reply(ctx.t(nftInfo.error))
+      if ('error' in nftInfoResponse) {
+        await ctx.reply(ctx.t(nftInfoResponse.error))
         return
       }
 
-      const nft = new NFTs(ctx, address, nftInfo, page)
+      const nft = new NFTs(ctx, address, nftInfoResponse.result, page)
 
       if (page === undefined) {
         await ctx.replyWithPhoto(nft.image, {
@@ -76,14 +69,14 @@ export const walletCallback = async (ctx: ContextType) => {
     }
 
     if (data === 'transactions') {
-      const transactionsArray = await getTransactions(address, 10, page || 0)
+      const transactionsResponse = await getTransactions(address, 10, page || 0)
 
-      if (transactionsArray.error) {
-        await ctx.reply(ctx.t(transactionsArray.error))
+      if ('error' in transactionsResponse) {
+        await ctx.reply(ctx.t(transactionsResponse.error))
         return
       }
 
-      const transactions = new Transactions(ctx, transactionsArray)
+      const transactions = new Transactions(ctx, transactionsResponse.result)
 
       await ctx.editMessageText(transactions.getCaption(), {
         parse_mode: 'Markdown',
@@ -92,14 +85,14 @@ export const walletCallback = async (ctx: ContextType) => {
     }
 
     if (data === 'backToWallet') {
-      const walletInfo = await getWalletInfo(address)
+      const walletInfoResponse = await getWalletInfo(address)
 
-      if (walletInfo.error) {
-        await ctx.reply(ctx.t(walletInfo.error))
+      if ('error' in walletInfoResponse) {
+        await ctx.reply(ctx.t(walletInfoResponse.error))
         return
       }
 
-      const wallet = new Wallet(ctx, walletInfo)
+      const wallet = new Wallet(ctx, walletInfoResponse.result)
 
       await ctx.editMessageText(wallet.getCaption(), {
         parse_mode: 'Markdown',
@@ -108,14 +101,14 @@ export const walletCallback = async (ctx: ContextType) => {
     }
 
     if (data === 'openWallet') {
-      const walletInfo = await getWalletInfo(address)
+      const walletInfoResponse = await getWalletInfo(address)
 
-      if (walletInfo.error) {
-        await ctx.reply(ctx.t(walletInfo.error))
+      if ('error' in walletInfoResponse) {
+        await ctx.reply(ctx.t(walletInfoResponse.error))
         return
       }
 
-      const wallet = new Wallet(ctx, walletInfo)
+      const wallet = new Wallet(ctx, walletInfoResponse.result)
 
       await ctx.reply(wallet.getCaption(), {
         parse_mode: 'Markdown',

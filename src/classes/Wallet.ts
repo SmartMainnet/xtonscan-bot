@@ -26,7 +26,7 @@ export class Wallet {
   }
 
   getCaption() {
-    return this.ctx.t('walletInfo', {
+    return this.ctx.t('wallet_info', {
       short_address: this.short_address,
       status: this.status,
       name: this.name,

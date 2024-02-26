@@ -4,14 +4,14 @@ import { ContextType } from '../types/index.js'
 
 export const scanTransaction = async (ctx: ContextType, address: string) => {
   try {
-    const transactionInfo = await getTransactionInfo(address)
+    const transactionInfoResponse = await getTransactionInfo(address)
 
-    if (transactionInfo.error) {
-      await ctx.reply(ctx.t(transactionInfo.error))
+    if ('error' in transactionInfoResponse) {
+      await ctx.reply(ctx.t(transactionInfoResponse.error))
       return
     }
 
-    const transaction = new Transaction(ctx, transactionInfo)
+    const transaction = new Transaction(ctx, transactionInfoResponse.result)
 
     await ctx.reply(transaction.getCaption(), {
       parse_mode: 'Markdown',

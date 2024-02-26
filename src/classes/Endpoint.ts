@@ -1,39 +1,18 @@
 import { api } from '../api/index.js'
+import { EndpointType, IApiResponse } from '../types/index.js'
 
 export class Endpoint {
-  method: string
-  url: string
-  data: {}
+  static call = async (method: string, url: string, data: {}): EndpointType => {
+    const response: IApiResponse = await api({ method, url, data })
 
-  constructor(method: string, url: string, data: {}) {
-    this.method = method
-    this.url = url
-    this.data = data
-  }
+    if (!response?.data || !response.data.ok) {
+      return { error: response.data?.error?.message || 'error' }
+    }
 
-  call = async () => {
-    const response = await api({
-      method: this.method,
-      url: this.url,
-      data: this.data,
-    })
-
-    if (!response.data) {
+    if (response.data.result === undefined) {
       return { error: 'error' }
     }
 
-    if (!response.data.ok) {
-      if (response.data.error?.message === "can't decode address") {
-        return { error: 'addressNotFound' }
-      }
-
-      if (response.data.error?.message === 'rate limit') {
-        return { error: 'rate_limit' }
-      }
-    }
-
-    if (response.data.ok && response.data.result) {
-      return response.data.result
-    }
+    return { result: response.data.result }
   }
 }

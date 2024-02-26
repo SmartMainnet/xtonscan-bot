@@ -5,10 +5,12 @@ interface IConfig {
   [key: string]: any
 }
 
-export interface IAPI {
-  ok: boolean
-  result?: { [key: string]: any }
-  error?: { [key: string]: any }
+export interface IApiResponse {
+  data?: {
+    ok: boolean
+    result?: { [key: string]: any }
+    error?: { message: string }
+  }
 }
 
 export interface IAttribute {
@@ -43,6 +45,8 @@ export interface IWalletInfo {
   transaction_count: number
   is_wallet: boolean
 }
+
+export type EndpointType = Promise<{ error: string } | { result: any }>
 
 export type ContextType = Context & IConfig & I18nFlavor
 

@@ -8,7 +8,7 @@ only_members =
   To use the Bot, you must be a Member from [Smart Bots](https://t.me/{ $CHANNEL })
 only_ton_addresses =
   ⚠️ Only TON addresses!
-addressNotFound =
+address_not_found =
   ⚠️ Address Not Found!
 limit =
   Rate limit exceeded
@@ -49,7 +49,7 @@ jettons =
 
   { $jettons }
 
-walletInfo =
+wallet_info =
   📖 *Wallet Info (Beta)*
   👛 Address: *{ $short_address }*
 
@@ -58,7 +58,7 @@ walletInfo =
   💎 Balance: *{ $balance_ton } TON | ${ $balance_usd }*
   🪙 Jettons Count: *{ $jetton_count }*
   🖼 NFT Count: *{ $nft_count }*
-jettonInfo =
+jetton_info =
   📖 *Jetton Info (Beta)*
   👛 Address: *{ $short_address }*
 
@@ -69,7 +69,7 @@ jettonInfo =
   💎 Symbol: *{ $symbol }
 
   📓 *{ $description }
-nftInfo =
+nft_info =
   Name: *{ $name }*{ $description }{ $attributes }{ $approved_by }
 
   Owner: *{ $owner }*

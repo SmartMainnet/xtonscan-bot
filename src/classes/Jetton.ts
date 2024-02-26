@@ -36,7 +36,7 @@ export class Jetton {
   }
 
   getCaption() {
-    return this.ctx.t('jettonInfo', {
+    return this.ctx.t('jetton_info', {
       short_address: shortAddress(this.address),
       mintable: this.mintable ? 'Yes' : 'No',
       total_supply: this.total_supply,
