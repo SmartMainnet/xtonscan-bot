@@ -19,11 +19,12 @@ export interface IAttribute {
 }
 
 export interface INftInfo {
+  page: number
+  max_page: number
   nft_address: string
   collection_address: string
   owner_address: string
   owner_name?: string
-  last_page?: number
   nft_image: string
   nft_name: string
   nft_description?: string

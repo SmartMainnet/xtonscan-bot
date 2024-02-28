@@ -88,6 +88,6 @@ export class Transactions {
   }
 
   getInlineKeyboard() {
-    return transactionsInlineKeyboard(this.owner_address, this.page, this.max_page)
+    return transactionsInlineKeyboard(this.owner_address, this.max_page, this.page)
   }
 }

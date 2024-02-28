@@ -27,7 +27,7 @@ export const walletCallback = async (ctx: ContextType) => {
         return
       }
 
-      const jettons = new Jettons(ctx, address, jettonsResponse.result)
+      const jettons = new Jettons(ctx, jettonsResponse.result)
 
       await ctx.editMessageText(jettons.getCaption(), {
         parse_mode: 'Markdown',
@@ -43,7 +43,7 @@ export const walletCallback = async (ctx: ContextType) => {
         return
       }
 
-      const nft = new NFTs(ctx, address, nftInfoResponse.result, page)
+      const nft = new NFTs(ctx, nftInfoResponse.result)
 
       if (page === undefined) {
         await ctx.replyWithPhoto(nft.image, {

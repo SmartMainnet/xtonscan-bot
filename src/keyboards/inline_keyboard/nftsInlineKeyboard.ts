@@ -5,8 +5,8 @@ export const nftsInlineKeyboard = (
   isApprovedByGetgems: boolean,
   urlTonviewer: string,
   urlGetgems: string,
-  lastPage: number,
-  page: number = 0
+  maxPage: number,
+  page: number
 ) => {
   const tonviewerButton = [InlineKeyboard.url('🔎 Tonviewer', urlTonviewer)]
   const getgemsButton = isApprovedByGetgems
@@ -21,13 +21,13 @@ export const nftsInlineKeyboard = (
     )
   }
 
-  if (lastPage > 1) {
+  if (maxPage > 1) {
     paginationButtonRow.push(
-      InlineKeyboard.text(`${page + 1} / ${lastPage}`, 'disabledButton')
+      InlineKeyboard.text(`${page + 1} / ${maxPage}`, 'disabledButton')
     )
   }
 
-  if (page < lastPage - 1) {
+  if (page < maxPage - 1) {
     paginationButtonRow.push(
       InlineKeyboard.text('>', `nfts ${ownerAddress} ${page + 1}`)
     )

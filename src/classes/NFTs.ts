@@ -14,17 +14,14 @@ export class NFTs {
   is_approved_by_getgems: boolean
   tonviewer_url: string
   getgems_url: string
-  last_page: number
-  page?: number
+  max_page: number
+  page: number
 
-  constructor(
-    ctx: ContextType,
-    owner_address: string,
-    nftInfo: INftInfo,
-    page?: number
-  ) {
+  constructor(ctx: ContextType, nftInfo: INftInfo) {
     this.ctx = ctx
-    this.owner_address = owner_address
+    this.page = nftInfo.page
+    this.max_page = nftInfo.max_page
+    this.owner_address = nftInfo.owner_address
     this.owner_name_or_address =
       nftInfo.owner_name || Address.short(nftInfo.owner_address)
     this.image = nftInfo.nft_image
@@ -49,8 +46,6 @@ export class NFTs {
       : false
     this.tonviewer_url = `https://tonviewer.com/${nftInfo.owner_address}/nft/${nftInfo.nft_address}`
     this.getgems_url = `https://getgems.io/collection/${nftInfo.collection_address}/${nftInfo.nft_address}`
-    this.last_page = nftInfo.last_page || 0
-    this.page = page
   }
 
   getCaption() {
@@ -69,7 +64,7 @@ export class NFTs {
       this.is_approved_by_getgems,
       this.tonviewer_url,
       this.getgems_url,
-      this.last_page,
+      this.max_page,
       this.page
     )
   }

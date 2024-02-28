@@ -7,10 +7,10 @@ export class Jettons {
   owner_address: string
   jettons: any
 
-  constructor(ctx: ContextType, owner_address: string, jettons: any) {
+  constructor(ctx: ContextType, jettonsInfo: any) {
     this.ctx = ctx
-    this.owner_address = owner_address
-    this.jettons = jettons
+    this.owner_address = jettonsInfo.owner_address
+    this.jettons = jettonsInfo.jettons
       ?.map((jetton_data: any) => {
         const name = jetton_data.jetton.name
         const jettonAddress = jetton_data.jetton.address
