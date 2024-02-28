@@ -11,6 +11,20 @@ export class Jettons {
     this.ctx = ctx
     this.owner_address = jettonsInfo.owner_address
     this.jettons = jettonsInfo.jettons
+      ?.filter((jetton_data: any) => {
+        const balance = jetton_data.balance / 10 ** jetton_data.jetton.decimals
+        const price = jetton_data.price.prices.USD
+
+        return balance * price > 0.01
+      })
+      ?.sort((a: any, b: any) => {
+        const balanceA = a.balance / 10 ** a.jetton.decimals
+        const balanceB = b.balance / 10 ** b.jetton.decimals
+        const priceA = a.price.prices.USD
+        const priceB = b.price.prices.USD
+
+        return balanceB * priceB - balanceA * priceA
+      })
       ?.map((jetton_data: any) => {
         const name = jetton_data.jetton.name
         const jettonAddress = jetton_data.jetton.address
