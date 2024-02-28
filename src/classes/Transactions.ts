@@ -4,11 +4,11 @@ import { ContextType } from '../types/index.js'
 
 export class Transactions {
   ctx: ContextType
+  page: number
+  max_page: number
   owner_address: string
   raw_owner_address: string
   transactions: any
-  page: number
-  max_page: number
 
   constructor(ctx: ContextType, transactions: any) {
     this.ctx = ctx

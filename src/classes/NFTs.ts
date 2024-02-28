@@ -4,6 +4,8 @@ import { ContextType, INftInfo } from '../types/index.js'
 
 export class NFTs {
   ctx: ContextType
+  page: number
+  max_page: number
   owner_address: string
   owner_name_or_address: string
   image: string
@@ -14,8 +16,6 @@ export class NFTs {
   is_approved_by_getgems: boolean
   tonviewer_url: string
   getgems_url: string
-  max_page: number
-  page: number
 
   constructor(ctx: ContextType, nftInfo: INftInfo) {
     this.ctx = ctx

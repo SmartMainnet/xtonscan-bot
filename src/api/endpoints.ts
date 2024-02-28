@@ -44,8 +44,8 @@ export const getTransactions = async (
   })
 }
 
-export const getJettons = async (address: string) => {
-  return await Endpoint.call('GET', '/ton/getJettons', { address })
+export const getJettons = async (address: string, limit: number, page: number) => {
+  return await Endpoint.call('GET', '/ton/getJettons', { address, limit, page })
 }
 
 export const getNfts = async (address: string) => {

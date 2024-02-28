@@ -20,7 +20,7 @@ export const walletCallback = async (ctx: ContextType) => {
     const page = pageString !== undefined ? Number(pageString) : undefined
 
     if (data === 'jettons') {
-      const jettonsResponse = await getJettons(address)
+      const jettonsResponse = await getJettons(address, 10, page || 0)
 
       if ('error' in jettonsResponse) {
         await ctx.reply(ctx.t(jettonsResponse.error))

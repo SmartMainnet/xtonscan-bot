@@ -1,14 +1,18 @@
-import { backToWalletInlineKeyboard } from '../keyboards/inline_keyboard/index.js'
+import { jettonsInlineKeyboard } from '../keyboards/inline_keyboard/index.js'
 import { Address } from './index.js'
 import { ContextType } from '../types/index.js'
 
 export class Jettons {
   ctx: ContextType
+  page: number
+  max_page: number
   owner_address: string
   jettons: any
 
   constructor(ctx: ContextType, jettonsInfo: any) {
     this.ctx = ctx
+    this.page = jettonsInfo.page
+    this.max_page = jettonsInfo.max_page
     this.owner_address = jettonsInfo.owner_address
     this.jettons = jettonsInfo.jettons
       ?.filter((jetton_data: any) => {
@@ -52,6 +56,6 @@ export class Jettons {
   }
 
   getInlineKeyboard() {
-    return backToWalletInlineKeyboard(this.owner_address)
+    return jettonsInlineKeyboard(this.owner_address, this.max_page, this.page)
   }
 }
