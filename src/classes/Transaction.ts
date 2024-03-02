@@ -1,6 +1,6 @@
 import { transactionInlineKeyboard } from '../keyboards/inline_keyboard/index.js'
 import { Address } from './index.js'
-import { getNameOrShortAddress, toTon } from '../utils/index.js'
+import { getDeepLink, getAddressDeepLink, toTon } from '../utils/index.js'
 import { ContextType } from '../types/index.js'
 
 export class Transaction {
@@ -44,9 +44,9 @@ export class Transaction {
           const { recipient } = action.TonTransfer
           const { amount } = action.TonTransfer
 
-          const from = getNameOrShortAddress(sender)
-          const to = getNameOrShortAddress(recipient)
           const value = toTon(amount)
+          const from = getAddressDeepLink(ctx, sender)
+          const to = getAddressDeepLink(ctx, recipient)
 
           return `💎 *Transfer TON:* ${from} => ${to}\n  └   ${value} TON`
         }
@@ -55,7 +55,7 @@ export class Transaction {
           const { ContractDeploy } = action
           const { status } = action
 
-          const contract = getNameOrShortAddress(ContractDeploy)
+          const contract = getAddressDeepLink(ctx, ContractDeploy)
 
           return `📝 *Deploy contract:* ${contract}\n  └   ${status}`
         }
@@ -65,13 +65,16 @@ export class Transaction {
           const { recipient } = action.JettonTransfer
           const { amount } = action.JettonTransfer
           const { decimals } = action.JettonTransfer
+
+          const { address } = action.JettonTransfer.jetton
           const { symbol } = action.JettonTransfer.jetton
 
-          const from = getNameOrShortAddress(sender)
-          const to = getNameOrShortAddress(recipient)
           const value = toTon(amount, decimals)
+          const jetton = getDeepLink(ctx, symbol, Address.getNonBounceable(address))
+          const from = getAddressDeepLink(ctx, sender)
+          const to = getAddressDeepLink(ctx, recipient)
 
-          return `🪙 *Transfer token:* ${from} => ${to}\n  └   ${value} ${symbol}`
+          return `🪙 *Transfer jetton:* ${from} => ${to}\n  └   ${value} ${jetton}`
         }
 
         if (isNftItemTransfer) {
@@ -91,20 +94,30 @@ export class Transaction {
           const amount_in = action.JettonSwap.amount_in
           const decimals_in = action.JettonSwap.jetton_master_in?.decimals
           const symbol_in = action.JettonSwap.jetton_master_in?.symbol
+          const address_in = action.JettonSwap.jetton_master_in?.address
 
           const amount_out = action.JettonSwap.amount_out
           const decimals_out = action.JettonSwap.jetton_master_out?.decimals
           const symbol_out = action.JettonSwap.jetton_master_out?.symbol
+          const address_out = action.JettonSwap.jetton_master_out?.address
 
-          const from = getNameOrShortAddress(router)
-          const to = getNameOrShortAddress(user_wallet)
+          const from = getAddressDeepLink(ctx, router)
+          const to = getAddressDeepLink(ctx, user_wallet)
 
           const input = ton_in
             ? `${toTon(ton_in)} TON`
-            : `${toTon(amount_in, decimals_in)} ${symbol_in}`
+            : `${toTon(amount_in, decimals_in)} ${getDeepLink(
+                ctx,
+                symbol_in,
+                Address.getNonBounceable(address_in)
+              )}`
           const output = ton_out
             ? `${toTon(ton_out)} TON`
-            : `${toTon(amount_out, decimals_out)} ${symbol_out}`
+            : `${toTon(amount_out, decimals_out)} ${getDeepLink(
+                ctx,
+                symbol_out,
+                Address.getNonBounceable(address_out)
+              )}`
 
           return `🔁 *Swap tokens:* ${from} => ${to}\n  └   ${input} > ${output}`
         }
@@ -114,9 +127,9 @@ export class Transaction {
           const { contract } = action.SmartContractExec
           const { ton_attached } = action.SmartContractExec
 
-          const from = getNameOrShortAddress(executor)
-          const to = getNameOrShortAddress(contract)
           const value = toTon(ton_attached)
+          const from = getAddressDeepLink(ctx, executor)
+          const to = getAddressDeepLink(ctx, contract)
 
           return `📃 *Call contract:* ${from} => ${to}\n  └   ${value} TON`
         }
