@@ -13,7 +13,7 @@ export const scanTransaction = async (ctx: ContextType, address: string) => {
 
     const transaction = new Transaction(ctx, transactionInfoResponse.result)
 
-    await ctx.reply(transaction.getCaption(), {
+    await ctx.reply(await transaction.getCaption(), {
       parse_mode: 'Markdown',
       reply_markup: transaction.getInlineKeyboard(),
     })
