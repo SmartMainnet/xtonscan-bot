@@ -1,4 +1,4 @@
-export * from './Endpoint.js'
+export * from './API.js'
 export * from './Address.js'
 
 export * from './Wallet.js'

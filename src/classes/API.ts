@@ -1,7 +1,7 @@
 import { api } from '../api/index.js'
 import { EndpointType, IApiResponse } from '../types/index.js'
 
-export class Endpoint {
+export class API {
   static call = async (method: string, url: string, data: {}): EndpointType => {
     const response: IApiResponse = await api({ method, url, data })
 
